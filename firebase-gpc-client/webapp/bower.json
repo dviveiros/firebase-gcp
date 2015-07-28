@@ -1,0 +1,30 @@
+{
+  "name": "firebase-gcp",
+  "version": "0.0.1",
+  "authors": [
+    "dviveiros <daniel.viveiros@gmail.com>"
+  ],
+  "description": "Firebase and GCP demo",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "https://gds-2015.firebaseapp.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-elements": "PolymerElements/iron-elements#1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#1.0.1",
+    "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
+    "neon-elements": "PolymerElements/neon-elements#1.0.0",
+    "page": "visionmedia/page.js#~1.6.3"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0"
+  }
+}
