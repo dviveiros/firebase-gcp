@@ -50,6 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
   <link rel="import" href="bower_components/firebase-element/firebase-collection.html">
+  <link rel="import" href="bower_components/firebase-element/firebase-auth.html">
 
   <!-- will be replaced with elements/elements.vulcanized.html -->
   <link rel="import" href="elements/elements.html">
@@ -57,12 +58,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src='https://cdn.firebase.com/js/client/2.2.7/firebase.js'></script>
   <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
-  <script src='/scripts/firebase-auth.js'></script>
+
+  <!-- <script src='/scripts/firebase-auth.js'></script> -->
 </head>
 
 <body unresolved class="fullbleed layout vertical">
+
+
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
+    <!-- Login -->
+    <firebase-auth id="firebaseLogin"
+                   autoLogin="true"
+                   user="{{user}}"
+                   status-known="{{statusKnown}}"
+                   location="https://gds-2015.firebaseio.com"
+                   provider="facebook"
+                   on-error="errorHandler"
+                   on-user-created="userSuccessHandler">
+    </firebase-auth>
 
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
@@ -111,7 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Application sub title -->
           <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead" id="welcome"></div>
+            <div class="bottom-title paper-font-subhead">Welcome, <span>{{user.facebook.displayName}}</span></div>
           </div>
 
         </paper-toolbar>
