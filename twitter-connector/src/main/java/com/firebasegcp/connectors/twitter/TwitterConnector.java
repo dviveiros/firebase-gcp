@@ -29,6 +29,9 @@ public class TwitterConnector {
     
     public static void oauth(String consumerKey, String consumerSecret, String token, String secret, String hashtag)
             throws Throwable {
+
+        System.out.println( "Listening to hashtag " + hashtag );
+
         // Create an appropriately sized blocking queue
         BlockingQueue<String> queue = new LinkedBlockingQueue<String>(1000);
 

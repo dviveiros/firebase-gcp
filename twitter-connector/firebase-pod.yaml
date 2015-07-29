@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: firebase-node
+spec:  # specification of the pod’s contents
+  restartPolicy: Never
+  containers:
+  - name: firebase-twitter-connector
+    image: "gcr.io/s10-viveiros/firebase-twitter-connector"
+    env:
+      - name: TWITTER_CONSUMER_KEY
+        value: "VavmtJHVCednBHRZIhprfWdgN"
+      - name: TWITTER_CONSUMER_SECRET
+        value: qd2jaYYiYFxVkMn8XabsBH3PeTjbn1MPljaxywCcPnuIGkSYer
+      - name: TWITTER_ACCESS_TOKEN
+        value: 24888709-FDlm9YAYJFr5TzgjVzkndj3eLqztKFmO7G4X9LAmc
+      - name: TWITTER_ACCESS_TOKEN_SECRET
+        value: kGZJSy9Bp2pYUgQUdGVnOrkqZJr4stG458pQqRpYErnR3
+      - name: TWITTER_HASHTAG
+        value: google
