@@ -27,19 +27,16 @@ public class TwitterConnector {
     private static Configuration cfg = new EnvironmentConfiguration();
 
     
-    public static void oauth(String consumerKey, String consumerSecret, String token, String secret)
+    public static void oauth(String consumerKey, String consumerSecret, String token, String secret, String hashtag)
             throws Throwable {
         // Create an appropriately sized blocking queue
-        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(cfg.getInt("smartcanvas_connectors_twitter_queueSize", 1000));
+        BlockingQueue<String> queue = new LinkedBlockingQueue<String>(1000);
 
         // Define our endpoint: By default, delimited=length is set (we need
         // this for our processor)
         // and stall warnings are on.
         StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
-        String[] hashtagsToMonitor = cfg.getStringArray("smartcanvas_connectors_twitter_tracking_hashtags");
-        if (hashtagsToMonitor.length == 0) {
-            hashtagsToMonitor = new String[] { "smartcanvas" };
-        }
+        String[] hashtagsToMonitor = new String[] { hashtag };
         
         List<String> terms = Lists.newArrayList(hashtagsToMonitor);
         endpoint.trackTerms(terms);
@@ -53,7 +50,7 @@ public class TwitterConnector {
         // Create an executor service which will spawn threads to do the actual
         // work of parsing the incoming messages and
         // calling the listeners on each message
-        int numProcessingThreads = cfg.getInt("smartcanvas_connectors_twitter_numProcessingThreads", 4);
+        int numProcessingThreads = 4;
         ExecutorService service = Executors.newFixedThreadPool(numProcessingThreads);
 
         // Wrap our BasicClient with the twitter4j client
@@ -68,7 +65,7 @@ public class TwitterConnector {
             t4jClient.process();
         }
 
-        Thread.sleep(cfg.getInt("smartcanvas_connectors_twitter_sleepTime", 600000));
+        Thread.sleep(600000);
 
         t4jClient.stop();
     }
@@ -80,20 +77,23 @@ public class TwitterConnector {
             String consumerSecret;
             String token;
             String secret;
+            String hashtag;
 
-            if (args.length == 4) {
+            if (args.length == 5) {
                 consumerKey = args[0];
                 consumerSecret = args[1];
                 token = args[2];
                 secret = args[3];
+                hashtag = args[4];
             } else {
                 consumerKey = cfg.getString("TWITTER_CONSUMER_KEY");
                 consumerSecret = cfg.getString("TWITTER_CONSUMER_SECRET");
                 token = cfg.getString("TWITTER_ACCESS_TOKEN");
                 secret = cfg.getString("TWITTER_ACCESS_TOKEN_SECRET");
+                hashtag = cfg.getString("TWITTER_HASHTAG");
             }
             
-            TwitterConnector.oauth(consumerKey, consumerSecret, token, secret);
+            TwitterConnector.oauth(consumerKey, consumerSecret, token, secret, hashtag);
             
         } catch (InterruptedException e) {
             System.err.println(e);
