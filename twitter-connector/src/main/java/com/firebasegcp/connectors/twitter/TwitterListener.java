@@ -1,26 +1,18 @@
 package com.firebasegcp.connectors.twitter;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
-
-import org.apache.commons.configuration.Configuration;
-
-import twitter4j.HashtagEntity;
-import twitter4j.MediaEntity;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.URLEntity;
-
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.Sets;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twitter.hbc.twitter4j.handler.StatusStreamHandler;
 import com.twitter.hbc.twitter4j.message.DisconnectMessage;
 import com.twitter.hbc.twitter4j.message.StallWarningMessage;
+import org.apache.commons.configuration.Configuration;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 final class TwitterListener implements StatusStreamHandler {
 
@@ -35,10 +27,33 @@ final class TwitterListener implements StatusStreamHandler {
     public void onStatus(Status status) {
 
         if (!status.isRetweet()) {
-            System.out.println(status.getUser().getName());
-            System.out.println(status.getText());
+            try {
+                Tweet tweet = new Tweet(status.getUser().getName(), status.getText());
+                sendTweet(String.valueOf(status.getId()), tweet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
+    }
+
+    /**
+     * Send PUT request to Firebase to create a new tweet there
+     */
+    private void sendTweet( String id, Tweet tweet ) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonMessage = mapper.writeValueAsString( tweet );
+
+        URL url = new URL("https://gds-2015.firebaseio.com/tweets/" + id + ".json");
+        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+        httpCon.setDoOutput(true);
+        httpCon.setRequestMethod("PUT");
+        httpCon.setRequestProperty("Content-Type", "application/json");
+        OutputStreamWriter out = new OutputStreamWriter(
+                httpCon.getOutputStream());
+        out.write(jsonMessage);
+        out.close();
+        httpCon.getInputStream();
     }
 
     @Override
