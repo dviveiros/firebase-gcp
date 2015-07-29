@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="description" content="Firebase & GCP - Demo">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Daniel Viveiros" />
-  <title>Polymer Starter Kit</title>
+  <title>Firebase & GCP: Polymer Demo</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
@@ -59,7 +59,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src='https://cdn.firebase.com/js/client/2.2.7/firebase.js'></script>
   <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
 
-  <!-- <script src='/scripts/firebase-auth.js'></script> -->
 </head>
 
 <body unresolved class="fullbleed layout vertical">
@@ -73,10 +72,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                    user="{{user}}"
                    status-known="{{statusKnown}}"
                    location="https://gds-2015.firebaseio.com"
-                   provider="facebook"
-                   on-error="errorHandler"
-                   on-user-created="userSuccessHandler">
+                   provider="facebook">
     </firebase-auth>
+
+    <script>
+      function logout() {
+        this.firebaseLogin.logout();
+      }
+
+      function login() {
+        this.firebaseLogin.login();
+      }
+
+      document.querySelector('#firebaseLogin').addEventListener('login', function(e) {
+        var usersRef = new Firebase("https://gds-2015.firebaseio.com/users/");
+        var user = firebaseLogin.user;
+        if (user) {
+          usersRef.child(user.uid).set({
+            provider: user.provider,
+            name: user.facebook.displayName
+          });
+        }
+      });
+
+      document.querySelector('#firebaseLogin').addEventListener('error', function(e) {
+        console.error( ("Login failed: " + e) );
+      });
+    </script>
+    <!-- Final de Login -->
 
     <paper-drawer-panel id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
@@ -99,9 +122,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Users</span>
           </a>
 
-          <a data-route="contact" href="/contact">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
+          <a href="javascript:login()">
+            <iron-icon icon="none"></iron-icon>
+            <span>Login</span>
+          </a>
+
+          <a href="javascript:logout()">
+            <iron-icon icon="none"></iron-icon>
+            <span>Logout</span>
           </a>
         </paper-menu>
       </paper-scroll-header-panel>
@@ -160,7 +188,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <h2 class="paper-font-display2">Users</h2>
                 <p>User authenticated:</p>
                 <template is="dom-repeat" items="[[users]]" as="user">
-                    <li><span>[[user.name]]</span> using <span>[[user.provider]]</span></li>
+                    <li><b><span>[[user.name]]</span></b> using <b><span>[[user.provider]]</span></b></li>
                 </template>
               </paper-material>
 
@@ -175,34 +203,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="contact">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Contact</h2>
-                <p>This is the contact section</p>
-              </paper-material>
-            </section>
-
           </iron-pages>
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
-
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
-
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="networkFirst"
-                         precache-file="precache.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
 
   </template>
 
