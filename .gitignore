@@ -48,4 +48,5 @@ crashlytics.properties
 crashlytics-build.properties
 
 /firebase-gpc-client/webapp/bower_components/*
+/twitter-connector/run_docker.sh
 
