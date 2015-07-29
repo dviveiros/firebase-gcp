@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Firebase Demo - GDS 2015</title>
+
+    <!-- Firebase -->
+    <script src='https://cdn.firebase.com/js/client/2.2.7/firebase.js'></script>
+    <!-- JQuery -->
+    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- Firebase Authentication on Facebook -->
+    <script src='scripts/firebase-auth.js'></script>
+
+</head>
+
+<body>
+
+    <script>
+        // Get a reference to our tweets
+        var refUsers = new Firebase("https://gds-2015.firebaseio.com/tweets");
+
+        // Read the tweets
+        refUsers.on("value", function(snapshot) {
+            var tweet = snapshot.val();
+            addItem( tweet );
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+
+        // Keep the tweet list up-to-date
+        refUsers.on("child_added", function(snapshot, prevChildKey) {
+            var tweet = snapshot.val();
+            addItem( tweet );
+        });
+
+        //adds an item to the list
+        function addItem(tweet) {
+            if (tweet.author && tweet.message) {
+                var $tweetList = $("#tweetList");
+                var item = "<li class='list-group-item'>"
+                        + tweet.author
+                        + ' said '
+                        + tweet.message
+                        + '</li>';
+                $tweetList.append(item);
+            }
+        }
+    </script>
+
+    <h1><div id="welcome"></div></h1>
+
+    <ul class="list-group" id="tweetList">
+    </ul>
+
+
+</body>
+
+</html>
