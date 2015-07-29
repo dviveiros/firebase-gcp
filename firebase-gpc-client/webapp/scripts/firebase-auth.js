@@ -1,4 +1,5 @@
 var rootRef = new Firebase("https://gds-2015.firebaseio.com/");
+var username = 'undefined';
 
 /**
  * On document load
@@ -15,6 +16,7 @@ $(function() {
                 provider: authData.provider,
                 name: authData.facebook.displayName
             });
+            username = authData.facebook.displayName;
         }
     });
 
@@ -24,6 +26,13 @@ $(function() {
     } else {
         console.log( 'User already authenticated: ' + authData.uid + ' on provider ' + authData.provider );
     }
+
+    //write the welcome card
+    var $welcome = $("#welcome");
+    var welcomeMessage = "Welcome, " + username;
+    console.log( "Welcome message = " + welcomeMessage );
+    $welcome.text(welcomeMessage);
+
 });
 
 /**
