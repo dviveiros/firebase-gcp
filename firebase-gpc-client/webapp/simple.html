@@ -22,10 +22,10 @@
 
     <script>
         // Get a reference to our tweets
-        var refUsers = new Firebase("https://gds-2015.firebaseio.com/tweets");
+        var ref = new Firebase("https://gds-2015.firebaseio.com/tweets");
 
         // Read the tweets
-        refUsers.on("value", function(snapshot) {
+        ref.on("value", function(snapshot) {
             var tweet = snapshot.val();
             addItem( tweet );
         }, function (errorObject) {
@@ -33,7 +33,7 @@
         });
 
         // Keep the tweet list up-to-date
-        refUsers.on("child_added", function(snapshot, prevChildKey) {
+        ref.on("child_added", function(snapshot, prevChildKey) {
             var tweet = snapshot.val();
             addItem( tweet );
         });

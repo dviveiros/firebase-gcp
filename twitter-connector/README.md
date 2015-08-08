@@ -46,13 +46,13 @@ docker run -it --rm -e TWITTER_CONSUMER_KEY=$TWITTER_CONSUMER_KEY -e TWITTER_CON
     export TWITTER_ACCESS_TOKEN=...
     export TWITTER_ACCESS_TOKEN_SECRET=...
     export TWITTER_HASHTAG=...
-- Run the container:sudo docker run -it --rm -e TWITTER_CONSUMER_KEY=$TWITTER_CONSUMER_KEY -e TWITTER_CONSUMER_SECRET=$TWITTER_CONSUMER_SECRET -e TWITTER_ACCESS_TOKEN=$TWITTER_ACCESS_TOKEN -e TWITTER_ACCESS_TOKEN_SECRET=$TWITTER_ACCESS_TOKEN_SECRET -e TWITTER_HASHTAG=$TWITTER_HASHTAG dviveiros/firebasegcp-twitter-connector
+- Run the container: sudo docker run -it --rm -e TWITTER_CONSUMER_KEY=$TWITTER_CONSUMER_KEY -e TWITTER_CONSUMER_SECRET=$TWITTER_CONSUMER_SECRET -e TWITTER_ACCESS_TOKEN=$TWITTER_ACCESS_TOKEN -e TWITTER_ACCESS_TOKEN_SECRET=$TWITTER_ACCESS_TOKEN_SECRET -e TWITTER_HASHTAG=$TWITTER_HASHTAG dviveiros/firebasegcp-twitter-connector
 
 #### Running on GKE
 
 - Create your GKE cluster
 - Check if it is created: gcloud compute instances list
-- Generate credentials: gcloud beta container get-credentials --cluster=firebase-cluster --zone=us-central1-c
+- Generate credentials: gcloud beta container get-credentials --cluster=firebase-gke --zone=us-central1-c
 - Test access: kubectl get pods (nothing should appears here)
 - Create your pod: kubectl create -f ./firebase-pod.yaml --validate
     Where firebase-pod.yaml should be something like:
