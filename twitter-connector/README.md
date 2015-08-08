@@ -1,7 +1,7 @@
 firebasegcp-twitter-connector
 =============================
 
-//All credits to Fabio Uechi (fuechi@ciandt.com) who created most of the code for Smart Canvas
+All credits to Fabio Uechi (fuechi@ciandt.com) who created most of the code for Smart Canvas
 
 Twitter Connector for Firebase GCP Demo
 
